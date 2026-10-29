@@ -1,0 +1,94 @@
+{
+  "version": 1,
+  "marketData": {
+    "sources": [
+      "eastmoney",
+      "tencent"
+    ],
+    "quoteTolerancePct": 0.3,
+    "closeTolerancePct": 0.2,
+    "quoteCacheSeconds": 15,
+    "dailyCacheSeconds": 300,
+    "newsCacheSeconds": 300
+  },
+  "agents": [
+    {
+      "id": "agent1",
+      "name": "盘面舆情 Agent",
+      "role": "综合走势、技术指标、公告与资讯，识别短期催化与风险",
+      "enabled": true,
+      "provider": "rule",
+      "model": "local-rule",
+      "baseUrl": "",
+      "apiKeyEnv": "AGENT1_API_KEY",
+      "temperature": 0.2,
+      "maxTokens": 8192,
+      "timeoutMs": 90000,
+      "systemPrompt": "你是一名严谨的A股市场分析师。只依据给定数据做判断，明确区分事实、推断与不确定性，不得编造公告或价格。输出必须符合用户要求的JSON结构。"
+    },
+    {
+      "id": "agent2",
+      "name": "Qlib 多因子 Agent",
+      "role": "参考 Qlib 的 Alpha158 多因子思想，评估动量、反转、波动率与量价因子",
+      "enabled": true,
+      "provider": "rule",
+      "model": "local-rule",
+      "baseUrl": "",
+      "apiKeyEnv": "AGENT2_API_KEY",
+      "temperature": 0.15,
+      "maxTokens": 8192,
+      "timeoutMs": 90000,
+      "systemPrompt": "你是一名量化因子研究员。策略信号由程序计算，你只能解释给定因子，不得更改因子数值或虚构回测结果。输出必须符合用户要求的JSON结构。",
+      "parameters": {
+        "momentumWindow": 20,
+        "shortMomentumWindow": 5,
+        "volatilityWindow": 20,
+        "volumeWindow": 20
+      }
+    },
+    {
+      "id": "agent3",
+      "name": "收敛发散 Agent",
+      "role": "参考 QuantsPlaybook 均线收敛与发散因子，识别形态收敛、方向选择与突破",
+      "enabled": true,
+      "provider": "rule",
+      "model": "local-rule",
+      "baseUrl": "",
+      "apiKeyEnv": "AGENT3_API_KEY",
+      "temperature": 0.15,
+      "maxTokens": 8192,
+      "timeoutMs": 90000,
+      "systemPrompt": "你是一名价量形态研究员。收敛/发散得分由程序计算，你只能解释形态、突破与风险，不得虚构历史表现。输出必须符合用户要求的JSON结构。",
+      "parameters": {
+        "windows": [
+          5,
+          10,
+          20,
+          30,
+          60
+        ],
+        "breakoutWindow": 20,
+        "volumeConfirmRatio": 1.2
+      }
+    },
+    {
+      "id": "agent4",
+      "name": "首席决策 Agent",
+      "role": "整合前序Agent的分析、冲突与数据质量，形成唯一可执行结论",
+      "enabled": true,
+      "provider": "rule",
+      "model": "local-rule",
+      "baseUrl": "",
+      "apiKeyEnv": "AGENT4_API_KEY",
+      "temperature": 0.1,
+      "maxTokens": 16384,
+      "timeoutMs": 180000,
+      "systemPrompt": "你是最终决策负责人。必须尊重程序计算与数据质量，处理Agent之间的分歧，给出条件化、可执行且包含止损的计划。不得承诺收益。输出必须符合用户要求的JSON结构。"
+    }
+  ],
+  "weights": {
+    "agent1": 0.35,
+    "agent2": 0.35,
+    "agent3": 0.3
+  }
+}

@@ -1,0 +1,9 @@
+node_modules
+dist
+.git
+.env
+*.log
+server/config/secrets.json
+server/config/*.bak
+docs/*.png
+dashboard-check.png
